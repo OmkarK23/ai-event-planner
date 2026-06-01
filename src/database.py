@@ -1,15 +1,8 @@
 import sqlite3
-import os
 from datetime import datetime
 
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(CURRENT_DIR, "..", "data")
-
-# Ensure data directory exists
-os.makedirs(DATA_DIR, exist_ok=True)
-
-DB_PATH = os.path.join(DATA_DIR, "event_history.db")
+DB_PATH = "/tmp/event_history.db"
 
 
 def create_connection():
@@ -90,3 +83,8 @@ def get_history():
     conn.close()
 
     return rows
+
+
+if __name__ == "__main__":
+    create_table()
+    print("Database and table created successfully.")
