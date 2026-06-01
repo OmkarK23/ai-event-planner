@@ -6,7 +6,9 @@ import plotly.express as px
 import pandas as pd
 
 # Access src folder
-sys.path.append('../src')
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(CURRENT_DIR, "..", "src")
+sys.path.append(SRC_DIR)
 
 from ai_strategy_generator import generate_event_strategy
 from marketing_generator import generate_marketing_content
@@ -14,8 +16,11 @@ from sentiment_analyzer import analyze_sentiment
 from database import create_table, save_event, get_history
 from recommendation_engine import generate_recommendations
 # Load trained model
-model = joblib.load('../models/attendance_model.pkl')
-df = pd.read_csv('../data/event_data.csv')
+MODEL_PATH = os.path.join(CURRENT_DIR, "..", "models", "attendance_model.pkl")
+DATA_PATH = os.path.join(CURRENT_DIR, "..", "data", "event_data.csv")
+
+model = joblib.load(MODEL_PATH)
+df = pd.read_csv(DATA_PATH)
 create_table()
 # -------------------------
 # PAGE CONFIG
