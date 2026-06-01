@@ -1,13 +1,14 @@
 import sqlite3
+import os
 from datetime import datetime
 
 
-DB_PATH = "../data/event_history.db"
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(CURRENT_DIR, "..", "data", "event_history.db")
 
 
 def create_connection():
     return sqlite3.connect(DB_PATH)
-
 
 def create_table():
     conn = create_connection()
