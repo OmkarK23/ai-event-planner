@@ -29,7 +29,6 @@ create_table()
 st.set_page_config(
     page_title="AI Event Planning System",
     layout="wide",
-    initial_sidebar_state="collapsed"
 )
 
 # -------------------------
