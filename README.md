@@ -4,9 +4,41 @@ An AI-powered event management platform designed to improve event planning, mark
 
 ## Live Demo
 
-(Deployment link will be added here)
+Try the live application here:
+
+https://ai-event-planner-mxwjx5nzwrbfh3c8vbywjm.streamlit.app/
 
 ---
+
+## Features
+
+### Attendance Predictor
+
+Machine learning powered attendance prediction using event attributes.
+
+### AI Event Planner
+
+Generate event planning strategies using AI recommendations.
+
+### Marketing Generator
+
+Create AI-generated promotional event content.
+
+### Feedback Analyzer
+
+NLP sentiment analysis using TextBlob.
+
+### Analytics Dashboard
+
+Interactive visual analytics and engagement insights.
+
+### AI Recommendations
+
+Optimization recommendations using historical event data.
+
+### Event History
+
+Persistent event storage using SQLite.
 
 ## Overview
 
