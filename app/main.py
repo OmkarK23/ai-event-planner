@@ -1357,7 +1357,7 @@ if page == "Event History":
 st.markdown(
     """
     <div class="custom-footer">
-        Built by Omkar Kalekar • AI Engineering Portfolio Project • 2026
+        Built by Omkar Kalekar • AI Engineering Project • 2026
     </div>
     """,
     unsafe_allow_html=True
