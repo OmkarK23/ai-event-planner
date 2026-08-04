@@ -848,6 +848,11 @@ if page == "AI Event Planner":
 
     st.header("AI Event Strategy Generator")
 
+    st.caption(
+        "Generates a structured planning checklist using rule-based logic "
+        "(no external model call) -- deterministic and free to run."
+    )
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -1044,7 +1049,7 @@ if page == "Marketing Generator":
         key="marketing_generate_btn"
     ):
 
-        content = generate_marketing_content(
+        content, used_ai, note = generate_marketing_content(
             event_name,
             event_type,
             location,
@@ -1053,7 +1058,10 @@ if page == "Marketing Generator":
             audience
         )
 
-        st.success("Content Generated")
+        if used_ai:
+            st.success("Content generated with AI (OpenAI)")
+        else:
+            st.warning(f"Using rule-based template. {note}")
 
         st.text_area(
             "Generated Content",
@@ -1065,7 +1073,7 @@ if page == "Marketing Generator":
         save_event(
             event_name=event_name,
             event_type=event_type,
-            tool_used="Marketing Generator",
+            tool_used="Marketing Generator (AI)" if used_ai else "Marketing Generator (Template)",
             input_summary=f"{date}, {time}, {location}, audience: {audience}",
             output_result=content
         )
