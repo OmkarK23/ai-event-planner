@@ -1319,7 +1319,7 @@ if page == "AI Recommendations":
 
     if st.button("Generate Recommendations", key="recommendation_btn"):
 
-        recommendations = generate_recommendations()
+        recommendations = generate_recommendations(data_path=DATA_PATH)
 
         st.success("Recommendations Generated")
 
