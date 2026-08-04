@@ -705,6 +705,12 @@ if page == "Attendance Predictor":
 
     st.header("Event Attendance Predictor")
 
+    st.caption(
+        "Trained on a synthetic dataset with hand-picked effect sizes "
+        "(see README for methodology), not on real event outcomes. "
+        "Treat predictions as a demo of the pipeline, not a validated forecast."
+    )
+
     event_mapping = {
         "Career Fair": 0,
         "Hackathon": 1,
@@ -769,13 +775,6 @@ if page == "Attendance Predictor":
             value=1000
         )
 
-        feedback = st.slider(
-            "Expected Feedback Score",
-            1.0,
-            5.0,
-            4.0
-        )
-
     with col2:
 
         day = st.selectbox(
@@ -811,8 +810,7 @@ if page == "Attendance Predictor":
                 location_mapping[location],
                 promo_mapping[promotion],
                 expected,
-                budget,
-                feedback
+                budget
             ]],
             columns=[
                 'event_type_enc',
@@ -821,8 +819,7 @@ if page == "Attendance Predictor":
                 'location_enc',
                 'promo_enc',
                 'expected_audience',
-                'budget',
-                'feedback_score'
+                'budget'
             ]
         )
 

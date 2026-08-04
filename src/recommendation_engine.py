@@ -1,34 +1,34 @@
 import pandas as pd
 
 
+def _best_by_turnout_rate(df, column):
+    """
+    Rank categories by mean turnout rate (actual / expected audience) rather than
+    raw actual_attendance. Raw attendance can be confounded by a category happening
+    to have larger events on average; turnout rate isolates "does this category tend
+    to outperform its own expectation," which is the thing organizers actually want
+    to know when choosing between options.
+    """
+    rate = df["actual_attendance"] / df["expected_audience"]
+    return df.assign(_turnout_rate=rate).groupby(column)["_turnout_rate"].mean().idxmax()
+
+
 def generate_recommendations(data_path="../data/event_data.csv"):
 
     df = pd.read_csv(data_path)
 
-    best_event_type = df.groupby(
-        "event_type"
-    )["actual_attendance"].mean().idxmax()
-
-    best_promotion = df.groupby(
-        "promotion_channel"
-    )["actual_attendance"].mean().idxmax()
-
-    best_day = df.groupby(
-        "day_of_week"
-    )["actual_attendance"].mean().idxmax()
-
-    best_time = df.groupby(
-        "start_time"
-    )["actual_attendance"].mean().idxmax()
-
-    best_location = df.groupby(
-        "location"
-    )["actual_attendance"].mean().idxmax()
+    best_event_type = _best_by_turnout_rate(df, "event_type")
+    best_promotion = _best_by_turnout_rate(df, "promotion_channel")
+    best_day = _best_by_turnout_rate(df, "day_of_week")
+    best_time = _best_by_turnout_rate(df, "start_time")
+    best_location = _best_by_turnout_rate(df, "location")
 
     avg_attendance = int(df["actual_attendance"].mean())
 
     recommendation = f"""
-### AI Event Optimization Recommendations
+### Event Optimization Recommendations
+
+*Based on {len(df)} historical events in the dataset, ranked by turnout rate (actual ÷ expected attendance).*
 
 **Best Event Type:** {best_event_type}
 
