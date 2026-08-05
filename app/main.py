@@ -13,7 +13,7 @@ sys.path.append(SRC_DIR)
 from ai_strategy_generator import generate_event_strategy
 from marketing_generator import generate_marketing_content
 from sentiment_analyzer import analyze_sentiment
-from database import create_table, save_event, get_history
+from database import create_table, save_event, get_history, storage_backend_label
 from recommendation_engine import generate_recommendations
 # Load trained model
 MODEL_PATH = os.path.join(CURRENT_DIR, "..", "models", "attendance_model.pkl")
@@ -1339,6 +1339,8 @@ if page == "AI Recommendations":
 if page == "Event History":
 
     st.header("Saved Event History")
+
+    st.caption(f"Storage backend: {storage_backend_label()}")
 
     history = get_history()
 
