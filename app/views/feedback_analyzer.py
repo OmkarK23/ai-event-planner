@@ -4,7 +4,7 @@ from sentiment_analyzer import analyze_sentiment
 
 
 def render():
-    st.header("Feedback Sentiment Analyzer")
+    st.header("Feedback sentiment analyzer")
 
     st.caption("Lexicon-based sentiment scoring (TextBlob) -- a quick read, not a trained classifier.")
 

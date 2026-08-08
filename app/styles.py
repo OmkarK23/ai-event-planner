@@ -1,21 +1,70 @@
-"""Custom dark-theme CSS for the app. Extracted from the original single-file
-main.py so styling can be reviewed/edited independently of page logic."""
+"""
+'Gate pass' design system.
+
+Token summary (kept here as comments since Streamlit CSS has no var() scoping
+across st.markdown calls -- these are the source of truth if colors need to
+change later):
+
+  Background   #14161c  (flat ink, no gradient)
+  Surface      #1b1e26  (cards, inputs)
+  Surface-2    #1e2129  (nav items, subtle raise)
+  Border       #2a2d36
+  Border (tear)#333844  dashed, used only for the sidebar/content divider
+  Text primary #f4f1ea
+  Text muted   #8f8f88
+  Accent       #e8a33d  (amber -- real trained ML / real LLM calls, primary actions)
+  Accent text  #412402  (dark text on amber fills, for contrast)
+  Muted accent #2b6f6b  (teal -- rule-based / deterministic features, secondary signal)
+
+  Display font  'Oswald' (headings -- condensed, ticket/signage feel)
+  Body font     'Inter'
+  Mono font     'JetBrains Mono' (badge numbers, KPI values, data readouts)
+
+Why this direction: event tickets/boarding passes are the one visual object
+everyone touching this app already recognizes -- numbered gate stops, a torn
+perforation, monospace flight-board numerals. It's specific to the subject
+instead of a generic dark dashboard with a purple gradient.
+"""
 
 CUSTOM_CSS = """
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
 <style>
+
+:root {
+    --bg: #14161c;
+    --surface: #1b1e26;
+    --surface-2: #1e2129;
+    --border: #2a2d36;
+    --border-tear: #333844;
+    --text-primary: #f4f1ea;
+    --text-muted: #8f8f88;
+    --accent: #e8a33d;
+    --accent-text: #412402;
+    --accent-muted: #2b6f6b;
+    --accent-muted-text: #d8f3ef;
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
 
 /* =========================
 APP BACKGROUND
 ========================= */
 
 .stApp {
-    background: linear-gradient(
-        135deg,
-        #0f172a 0%,
-        #111827 45%,
-        #1e1b4b 100%
-    );
-    color: white;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
 }
 
 .block-container {
@@ -28,32 +77,83 @@ TYPOGRAPHY
 ========================= */
 
 h1 {
-    text-align: center;
-    font-size: 3rem !important;
-    font-weight: 800 !important;
-    color: white;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-display);
+    text-align: left;
+    font-size: 2.6rem !important;
+    font-weight: 600 !important;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.2px;
 }
 
 h2, h3 {
-    color: #e0e7ff;
+    font-family: var(--font-display);
+    font-weight: 500 !important;
+    color: var(--text-primary);
+}
+
+p, label, .stMarkdown {
+    color: var(--text-primary);
 }
 
 /* =========================
-PREMIUM SIDEBAR NAV
+SIDEBAR
 ========================= */
 
 section[data-testid="stSidebar"] {
-    background: linear-gradient(
-        180deg,
-        #020617 0%,
-        #071126 100%
-    );
-    border-right: 1px solid #1e293b;
-    min-width: 280px !important;
-    max-width: 280px !important;
-    padding-top: 10px;
+    background: var(--surface);
+    border-right: 1px dashed var(--border-tear);
+    min-width: 270px !important;
+    max-width: 270px !important;
+    padding-top: 8px;
 }
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    margin-top: 12px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    background: transparent;
+}
+
+.brand-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+}
+
+.brand-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.nav-label {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+/* Nav buttons: gate-pass style with a monospace stop number */
 
 section[data-testid="stSidebar"] .stButton {
     width: 100%;
@@ -61,77 +161,36 @@ section[data-testid="stSidebar"] .stButton {
 
 section[data-testid="stSidebar"] .stButton > button {
     width: 100%;
-    height: 78px !important;
-    min-height: 78px !important;
+    min-height: 46px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 22px !important;
-    margin-bottom: 16px;
-    background: rgba(15,23,42,0.85);
-    color: #e2e8f0;
-    border: 1px solid rgba(100, 116, 139, 0.35);
-    border-radius: 22px;
-    font-size: 15px;
-    font-weight: 650;
-    line-height: 1.25;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-    transition: all .35s ease;
+    padding: 0 14px !important;
+    margin-bottom: 6px;
+    background: var(--surface-2);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
     text-align: left;
-    overflow: hidden;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 section[data-testid="stSidebar"] .stButton > button:hover {
-    background: linear-gradient(90deg, #2563eb, #7c3aed, #ec4899);
-    color: white;
-    transform: translateX(8px) scale(1.03);
-    border: 1px solid #818cf8;
-    box-shadow: 0 18px 36px rgba(124, 58, 237, 0.42);
+    background: #23262f;
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+section[data-testid="stSidebar"] .stButton > button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 section[data-testid="stSidebar"] .stButton > button:active {
-    transform: scale(.98);
-}
-
-/* Sidebar brand */
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 35px;
-    margin-top: 15px;
-}
-
-.brand-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
-}
-
-.brand-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: white;
-}
-
-.brand-subtitle {
-    font-size: 13px;
-    color: #94a3b8;
-}
-
-.nav-label {
-    color: #94a3b8;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    margin-bottom: 14px;
+    transform: scale(0.99);
 }
 
 /* =========================
@@ -139,20 +198,28 @@ MAIN BUTTONS
 ========================= */
 
 .stButton>button {
-    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
-    color: white;
+    background: var(--accent);
+    color: var(--accent-text);
     border: none;
-    border-radius: 12px;
-    padding: 0.75rem 1rem;
-    font-weight: 700;
-    font-size: 16px;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
-    transition: all 0.3s ease;
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    transition: filter 0.15s ease;
 }
 
 .stButton>button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(236, 72, 153, 0.35);
+    filter: brightness(1.08);
+}
+
+.stButton>button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.stButton>button:active {
+    filter: brightness(0.95);
 }
 
 /* =========================
@@ -163,10 +230,17 @@ INPUTS
 .stNumberInput input,
 .stTextArea textarea,
 .stSelectbox div[data-baseweb="select"] {
-    background-color: #1e293b !important;
-    color: white !important;
-    border-radius: 10px !important;
-    border: 1px solid #475569 !important;
+    background-color: var(--surface) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border) !important;
+    font-family: var(--font-body) !important;
+}
+
+.stTextInput input:focus,
+.stNumberInput input:focus,
+.stTextArea textarea:focus {
+    border-color: var(--accent) !important;
 }
 
 /* =========================
@@ -174,102 +248,148 @@ METRICS
 ========================= */
 
 div[data-testid="stMetric"] {
-    background: rgba(30, 41, 59, 0.85);
-    padding: 20px;
-    border-radius: 18px;
-    border: 1px solid #475569;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: var(--surface);
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+div[data-testid="stMetricValue"] {
+    font-family: var(--font-mono) !important;
+    color: var(--text-primary) !important;
 }
 
 /* =========================
-FEATURE CARDS
+ALERTS -- overridden to match the ink/amber palette instead of
+Streamlit's default blue/green/orange tint set
 ========================= */
 
-.feature-card {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 25px;
-    backdrop-filter: blur(12px);
-    transition: all 0.35s ease;
+div[data-testid="stAlert"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 3px solid var(--accent) !important;
+    border-radius: 6px !important;
+    color: var(--text-primary) !important;
 }
-
-.feature-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.35);
-    border: 1px solid rgba(99, 102, 241, 0.45);
-}
-
-/* =========================
-ALERTS + EXPANDERS
-========================= */
 
 .streamlit-expanderHeader {
-    background-color: #1e293b;
-    border-radius: 10px;
-}
-
-.stAlert {
-    border-radius: 14px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
 }
 
 /* =========================
-PAGE FADE ANIMATION
+PAGE FADE (respects reduced motion via the media query above)
 ========================= */
 
 .block-container {
-    animation: fadeIn 0.55s ease-in-out;
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 /* =========================
-GLASS KPI CARDS
+GATE-PASS KPI CARDS (Home)
 ========================= */
 
 .kpi-card {
-    background: rgba(15, 23, 42, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    border-radius: 20px;
-    padding: 22px;
-    text-align: center;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-    transition: all 0.3s ease;
-}
-
-.kpi-card:hover {
-    transform: translateY(-6px);
-    border: 1px solid rgba(129, 140, 248, 0.7);
-    box-shadow: 0 18px 38px rgba(124,58,237,0.35);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    text-align: left;
 }
 
 .kpi-title {
-    color: #94a3b8;
-    font-size: 14px;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
     margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
 .kpi-value {
-    color: white;
-    font-size: 30px;
-    font-weight: 900;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 26px;
+    font-weight: 700;
 }
 
 /* =========================
-FOOTER BRANDING
+FEATURE CARDS (Home) -- accent = real trained ML/LLM, muted = rule-based/NLP
+========================= */
+
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+}
+
+.feature-card.is-real-ai {
+    border-left-color: var(--accent);
+}
+
+.feature-card.is-rule-based {
+    border-left-color: var(--accent-muted);
+}
+
+.feature-card-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.feature-card-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.feature-card.is-real-ai .feature-card-tag {
+    background: rgba(232, 163, 61, 0.15);
+    color: var(--accent);
+}
+
+.feature-card.is-rule-based .feature-card-tag {
+    background: rgba(43, 111, 107, 0.2);
+    color: #6fd1c9;
+}
+
+.feature-card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* =========================
+FOOTER
 ========================= */
 
 .custom-footer {
-    margin-top: 60px;
-    padding: 20px;
-    text-align: center;
-    color: #94a3b8;
-    font-size: 14px;
-    border-top: 1px solid rgba(148,163,184,0.2);
+    margin-top: 50px;
+    padding: 16px 0;
+    text-align: left;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    border-top: 1px dashed var(--border-tear);
 }
 </style>
 """

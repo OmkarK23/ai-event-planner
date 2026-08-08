@@ -1,17 +1,21 @@
-"""Sidebar navigation. Renders the nav and returns the currently selected page."""
+"""Sidebar navigation. Renders the nav and returns the currently selected page.
+
+Numbered like gate/stop numbers on a boarding pass rather than icon glyphs --
+concrete to the subject and legible at a glance, instead of ambiguous symbols
+like an arrow or a square standing in for "predict" or "plan"."""
 
 import streamlit as st
 
-NAV_ITEMS = {
-    "Home": "⌂  Overview | Home",
-    "Analytics Dashboard": "▥  Insights | Analytics Dashboard",
-    "Attendance Predictor": "↗  Predict | Attendance Predictor",
-    "AI Event Planner": "▣  Plan | AI Event Planner",
-    "Marketing Generator": "◉  Create | Marketing Generator",
-    "Feedback Analyzer": "▢  Analyze | Feedback Analyzer",
-    "AI Recommendations": "✧  Optimize | AI Recommendations",
-    "Event History": "↺  History | Event History",
-}
+NAV_ITEMS = [
+    ("01", "Home"),
+    ("02", "Analytics Dashboard"),
+    ("03", "Attendance Predictor"),
+    ("04", "AI Event Planner"),
+    ("05", "Marketing Generator"),
+    ("06", "Feedback Analyzer"),
+    ("07", "AI Recommendations"),
+    ("08", "Event History"),
+]
 
 
 def render_sidebar():
@@ -21,10 +25,10 @@ def render_sidebar():
     st.sidebar.markdown(
         """
         <div class="sidebar-brand">
-            <div class="brand-icon">✦</div>
+            <div class="brand-icon">AE</div>
             <div>
                 <div class="brand-title">AI Event Hub</div>
-                <div class="brand-subtitle">Smart Tools. Smarter Events.</div>
+                <div class="brand-subtitle">Smart tools. Smarter events.</div>
             </div>
         </div>
         <div class="nav-label">NAVIGATION</div>
@@ -32,11 +36,11 @@ def render_sidebar():
         unsafe_allow_html=True,
     )
 
-    for nav_page, label in NAV_ITEMS.items():
+    for stop_number, nav_page in NAV_ITEMS:
         is_active = st.session_state.page == nav_page
-        active_prefix = "● " if is_active else "○ "
-
-        if st.sidebar.button(active_prefix + label, key=f"nav_{nav_page}"):
+        marker = "→" if is_active else " "
+        label = f"{marker} {stop_number}   {nav_page}"
+        if st.sidebar.button(label, key=f"nav_{nav_page}"):
             st.session_state.page = nav_page
 
     return st.session_state.page

@@ -4,7 +4,7 @@ from recommendation_engine import generate_recommendations
 
 
 def render(data_path):
-    st.header("Event Recommendation Engine")
+    st.header("Event recommendation engine")
 
     st.markdown(
         "This module analyzes historical event performance data and recommends "

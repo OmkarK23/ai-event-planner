@@ -4,7 +4,7 @@ from database import get_history, storage_backend_label
 
 
 def render():
-    st.header("Saved Event History")
+    st.header("Saved event history")
 
     st.caption(f"Storage backend: {storage_backend_label()}")
 

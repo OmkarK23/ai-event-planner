@@ -5,7 +5,7 @@ from database import save_event
 
 
 def render(event_types, times, locations):
-    st.header("Marketing Content Generator")
+    st.header("Marketing content generator")
 
     col1, col2 = st.columns(2)
 

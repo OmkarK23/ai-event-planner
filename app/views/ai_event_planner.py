@@ -5,7 +5,7 @@ from database import save_event
 
 
 def render(event_types, days, times, locations, promo_channels):
-    st.header("AI Event Strategy Generator")
+    st.header("AI event strategy generator")
 
     st.caption(
         "Generates a structured planning checklist using rule-based logic "
