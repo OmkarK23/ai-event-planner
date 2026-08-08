@@ -1,4 +1,13 @@
+import os
+import sys
+
 import streamlit as st
+
+# Ensure this directory is on the path so `views` and sibling modules import
+# reliably regardless of how Streamlit's execution context resolves paths.
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+if APP_DIR not in sys.path:
+    sys.path.insert(0, APP_DIR)
 
 import context
 from styles import CUSTOM_CSS
