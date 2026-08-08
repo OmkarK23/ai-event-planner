@@ -1,0 +1,15 @@
+# Secrets — never commit these
+.streamlit/secrets.toml
+.env
+
+# Local fallback database (SQLite)
+data/event_history.db
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
