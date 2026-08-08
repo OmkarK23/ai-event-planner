@@ -6,7 +6,7 @@ FEATURES = [
     ("Attendance prediction", "Trained Random Forest model, evaluated against baselines.", "real-ai"),
     ("Marketing generator", "Calls OpenAI for real copy, with a template fallback.", "real-ai"),
     ("Event strategy", "Rule-based planning checklist -- no model call.", "rule-based"),
-    ("Sentiment analysis", "Lexicon-based scoring (TextBlob), not a trained classifier.", "rule-based"),
+    ("Sentiment analysis", "Lexicon-based scoring (VADER), tuned for short informal text.", "rule-based"),
     ("Analytics dashboard", "Visualize event performance across the dataset.", "rule-based"),
     ("Recommendations", "Turnout-rate statistics over historical events.", "rule-based"),
 ]
@@ -32,7 +32,7 @@ def render():
     snapshot = [
         ("Modules", "8"),
         ("Trained ML models", "1"),
-        ("NLP engine", "TextBlob"),
+        ("NLP engine", "VADER"),
         ("Database", db_backend),
     ]
 

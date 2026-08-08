@@ -1,32 +1,7 @@
 import plotly.express as px
 import streamlit as st
 
-# Plotly theme matched to the app's token system (styles.py) instead of the
-# default plotly_dark rainbow palette, which clashed against the ink/amber design.
-BG = "#1b1e26"
-GRID = "#2a2d36"
-TEXT = "#f4f1ea"
-TEXT_MUTED = "#8f8f88"
-
-# Amber/teal/gray family instead of plotly's default categorical rainbow, so
-# charts read as part of the same system as the rest of the app.
-CATEGORY_COLORS = ["#e8a33d", "#2b6f6b", "#8f8f88", "#c97b3d", "#4a7c76", "#6b6b63", "#d8b26a"]
-
-CONTINUOUS_SCALE = [[0, "#332615"], [0.5, "#8a5f1e"], [1, "#e8a33d"]]
-
-
-def _themed(fig):
-    fig.update_layout(
-        paper_bgcolor=BG,
-        plot_bgcolor=BG,
-        font=dict(family="Inter, sans-serif", color=TEXT, size=12),
-        title=dict(font=dict(family="Oswald, sans-serif", size=16, color=TEXT)),
-        legend=dict(font=dict(color=TEXT_MUTED)),
-        margin=dict(t=50, l=10, r=10, b=10),
-    )
-    fig.update_xaxes(gridcolor=GRID, zerolinecolor=GRID, color=TEXT_MUTED)
-    fig.update_yaxes(gridcolor=GRID, zerolinecolor=GRID, color=TEXT_MUTED)
-    return fig
+from chart_theme import themed, CATEGORY_COLORS, CONTINUOUS_SCALE, TEXT
 
 
 def render(df):
@@ -88,7 +63,7 @@ def render(df):
             color="actual_attendance", color_continuous_scale=CONTINUOUS_SCALE,
             title="Average attendance by event type",
         )
-        st.plotly_chart(_themed(fig1), use_container_width=True)
+        st.plotly_chart(themed(fig1), use_container_width=True)
 
     with col6:
         promo = filtered_df.groupby("promotion_channel")["actual_attendance"].mean().reset_index()
@@ -98,7 +73,7 @@ def render(df):
             color_discrete_sequence=CATEGORY_COLORS,
         )
         fig2.update_traces(textfont=dict(color=TEXT))
-        st.plotly_chart(_themed(fig2), use_container_width=True)
+        st.plotly_chart(themed(fig2), use_container_width=True)
 
     col7, col8 = st.columns(2)
 
@@ -108,7 +83,7 @@ def render(df):
             size="feedback_score", hover_data=["location", "promotion_channel"],
             title="Budget vs attendance", color_discrete_sequence=CATEGORY_COLORS,
         )
-        st.plotly_chart(_themed(fig3), use_container_width=True)
+        st.plotly_chart(themed(fig3), use_container_width=True)
 
     with col8:
         fig4 = px.histogram(
@@ -116,4 +91,4 @@ def render(df):
             nbins=25, title="Attendance distribution",
             color_discrete_sequence=CATEGORY_COLORS,
         )
-        st.plotly_chart(_themed(fig4), use_container_width=True)
+        st.plotly_chart(themed(fig4), use_container_width=True)

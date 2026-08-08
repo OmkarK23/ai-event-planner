@@ -1,5 +1,18 @@
 import pandas as pd
+import plotly.express as px
 import streamlit as st
+
+from chart_theme import themed
+
+FEATURE_LABELS = {
+    "event_type_enc": "Event type",
+    "day_enc": "Day",
+    "time_enc": "Start time",
+    "location_enc": "Location",
+    "promo_enc": "Promotion channel",
+    "expected_audience": "Expected audience",
+    "budget": "Budget",
+}
 
 
 def render(model, encoders):
@@ -71,3 +84,22 @@ def render(model, encoders):
             """,
             unsafe_allow_html=True,
         )
+
+        st.markdown('<div class="nav-label" style="margin-top: 28px;">WHAT THE MODEL WEIGHS MOST</div>', unsafe_allow_html=True)
+        st.caption(
+            "This is the model's overall feature importance, learned across all training "
+            "data -- it shows what generally drives its predictions, not a breakdown of "
+            "this specific result (that would need a different technique, like SHAP)."
+        )
+
+        importance_df = pd.DataFrame({
+            "Feature": [FEATURE_LABELS[c] for c in input_data.columns],
+            "Importance": model.feature_importances_,
+        }).sort_values("Importance", ascending=True)
+
+        fig = px.bar(
+            importance_df, x="Importance", y="Feature", orientation="h",
+            color_discrete_sequence=["#e8a33d"],
+        )
+        fig.update_traces(marker_color="#e8a33d")
+        st.plotly_chart(themed(fig, height=280), use_container_width=True)
